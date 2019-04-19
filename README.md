@@ -1,1 +1,1 @@
-# binpicking_action
+# my-action-server
