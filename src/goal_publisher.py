@@ -6,7 +6,7 @@ import rospy
 
 from actionlib.action_server import ActionServer
 # from binpicking_action.msg import Robot_binpickingAction, Robot_binpickingFeedback, Robot_binpickingResult
-from my_action_server_node.msg import MyActionActionGoal
+from my_action_server.msg import MyActionActionGoal
 import threading
 
 import collections

@@ -7,7 +7,7 @@ Example of how to use actionlib for multiple parallel processing of goals. Cance
 Run the action server node
 
 ```bash
-rosrun my_action_server my_action_server.py
+rosrun my_action_server my_action_server_node.py
 ```
 
 ## Create new goals with 
