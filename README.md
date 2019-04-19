@@ -47,5 +47,14 @@ rostopic pub /my_action_server/cancel actionlib_msgsoalID "stamp:
 id: ''" 
 ```
 
-if you want to cancel only a specific goal add the id of that goal (This is not working, opened issue #2 for this).
+if you want to cancel only a specific goal add the id of that goal, e.g.
+
+```bash
+rostopic pub /my_action_server/cancel actionlib_msgsoalID "stamp:
+  secs: 0
+  nsecs: 0
+id: '/my_action_server-8-1555715267.239146947'" 
+```
+
+
 
