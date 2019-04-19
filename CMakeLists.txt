@@ -70,7 +70,6 @@ find_package(Boost REQUIRED COMPONENTS system)
 add_action_files(
   DIRECTORY action
   FILES
-        Robot_binpicking.action
         MyAction.action
 #   Action1.action
 #   Action2.action

@@ -10,7 +10,13 @@ Run the action server node
 rosrun binpicking_action my_action_server.py
 ```
 
-Create new goals with 
+## Create new goals with 
+
+```bash
+rosrun binpicking_action goal_publisher.py
+```
+
+or by calling 
 
 ```bash
 rostopic pub /my_action_server/goal binpicking_action/MyActnActionGoal "header:
@@ -32,8 +38,14 @@ goal:
 publishing and latching message. Press ctrl-C to terminate
 ```
 
-or by calling 
+## Cancel goals using
 
 ```bash
-rosrun binpicking_action goal_publisher.py
+rostopic pub /my_action_server/cancel actionlib_msgsoalID "stamp:
+  secs: 0
+  nsecs: 0
+id: ''" 
 ```
+
+if you want to cancel only a specific goal add the id of that goal (This is not working, opened issue #2 for this).
+
