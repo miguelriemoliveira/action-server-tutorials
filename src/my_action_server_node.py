@@ -1,5 +1,5 @@
 #!/usr/bin/env python2
-# Miguel Riem Oliveira, April 2019
+# Miguel Riem Oliveira, Tiago Tavares, April 2019
 
 import rospy
 from actionlib.action_server import ActionServer
@@ -38,21 +38,22 @@ class MyActionServer(ActionServer):
         """
         # Analyse requested goal and decide whether to accept it or not
         goal = gh.get_goal()
-        rospy.loginfo("Received request for goal " + str(goal.id))
+        id = gh.get_goal_id().id
+        rospy.loginfo("Received request for goal " + str(id))
 
         # Goal acceptance criteria: Accept only goals where id is even, and number of active goal processing threads
         # is < 3 (this is a dummy criteria)
-        if goal.id % 2 == 0 and len(self._threads) < 3:
+        if goal.number % 2 == 0 and len(self._threads) < 3:
             gh.set_accepted()  # accept goal
             _current_goal = goal
 
             thread = threading.Thread(target=self.processGoal, args=(gh,))  # create a thread to process this goal
-            self._threads[goal.id] = (GoalHandleThread(gh, thread))  # add to tasks dictionary
+            self._threads[id] = (GoalHandleThread(gh, thread))  # add to tasks dictionary
             thread.start()  # initiate thread
-            rospy.logwarn("Accepted goal request. Launched a processing thread for goal id " + str(goal.id))
+            rospy.logwarn("Accepted goal request. Launched a processing thread for goal id " + str(id))
 
         else:  # goal rejection
-            rospy.logwarn("Rejected goal request for goal id " + str(goal.id))
+            rospy.logwarn("Rejected goal request for goal id " + str(id))
             gh.set_rejected(result=None, text="Goal id not even or number of active tasks > 3")
 
     def cancelCallback(self, gh):
@@ -61,7 +62,8 @@ class MyActionServer(ActionServer):
         :param gh: a handle to the goal
         """
         goal = gh.get_goal()  # get the goal
-        rospy.logerr("Received cancel request for goal " + str(goal.id))
+        id = gh.get_goal_id().id # get the goal id
+        rospy.logerr("Received cancel request for goal " + str(id))
         result = MyActionResult()  # create an empty result class instance
         result.result = "Goal canceled"
         gh.set_canceled(result=result, text="Canceled.")  # cancel the goal
@@ -75,7 +77,8 @@ class MyActionServer(ActionServer):
         """
         # Get the goal handle and the thread using the id as dictionary key
         goal = gh.get_goal()
-        _, thread = self._threads[goal.id]  # shows how to get the thread knowing the goal id
+        id = gh.get_goal_id().id
+        _, thread = self._threads[id]  # shows how to get the thread knowing the goal id
 
         r = rospy.Rate(1)  # 1hz
         tic = rospy.Time.now()
@@ -85,22 +88,22 @@ class MyActionServer(ActionServer):
 
             # Check if goal is active, if it is not active, interrupt processing
             if not gh.get_goal_status().status == actionlib_msgs.msg.GoalStatus.ACTIVE:
-                rospy.logerr("Goal " + str(goal.id) + " canceled.")
-                del self._threads[goal.id]  # remove from dictionary
+                rospy.logerr("Goal " + str(id) + " canceled.")
+                del self._threads[id]  # remove from dictionary
                 return  # the thread will terminate once the return is called
 
             # Check if goal processing is complete. If so, terminate goal
             if ellapsed_secs > goal.time_to_wait:
                 rospy.logwarn(
-                    "Completed goal " + str(goal.id) + " for " + '{:.1f}'.format(ellapsed_secs.to_sec()) + " secs.")
+                    "Completed goal " + str(id) + " for " + '{:.1f}'.format(ellapsed_secs.to_sec()) + " secs.")
 
                 result = MyActionResult()  # create an empty result class instance
                 result.result = "Goal achieved successfuly."
                 gh.set_succeeded(result=result, text="Reached time to wait.")
-                del self._threads[goal.id]  # remove from dictionary
+                del self._threads[id]  # remove from dictionary
                 return  # the thread will terminate once the return is called
             else:
-                rospy.loginfo("Processing goal " + str(goal.id) + " for " + '{:.1f}'.format(
+                rospy.loginfo("Processing goal " + str(id) + " for " + '{:.1f}'.format(
                     ellapsed_secs.to_sec()) + " out of " + '{:.1f}'.format(goal.time_to_wait.to_sec()) + " secs.")
                 # put here code that continues to process the goal ...
 

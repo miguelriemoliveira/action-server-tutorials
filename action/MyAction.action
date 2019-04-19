@@ -1,5 +1,5 @@
 #goal definition
-int32 id
+int32 number
 duration time_to_wait
 ---
 #result definition
