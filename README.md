@@ -1,7 +1,7 @@
 # my-action-server
 
 ```bash
-mike@X360:~$ rostopic pub /my_action_server/goal binpicking_action/MyActionActionGoal "header:
+rostopic pub /my_action_server/goal binpicking_action/MyActnActionGoal "header:
   seq: 0
   stamp:
     secs: 0
@@ -13,7 +13,7 @@ goal_id:
     nsecs: 0
   id: ''
 goal:
-  mode: 1
+  id: 0
   time_to_wait:
     secs: 10
     nsecs: 0" 

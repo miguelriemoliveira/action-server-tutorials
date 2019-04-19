@@ -1,0 +1,9 @@
+#goal definition
+int32 id
+duration time_to_wait
+---
+#result definition
+string result
+---
+#feedback
+string feedback
