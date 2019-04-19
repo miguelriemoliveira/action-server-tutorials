@@ -11,6 +11,7 @@ import collections
 # Named tuple for storing the goal handle and the corresponding processing thread
 GoalHandleThread = collections.namedtuple('GoalHandleThread', 'goal_handle thread')
 
+
 class MyActionServer(ActionServer):
     """ Tutorial for how to write a ros action server in python.
         Works with multiple paralell goals, since it creates a processing thread for each newly received (and accepted) goal.
@@ -23,10 +24,11 @@ class MyActionServer(ActionServer):
         :param name: name of the action server
         """
         self.server_name = name
-        ActionServer.__init__(self, name, MyActionAction, self.goalCallback, self.cancelCallback, False) # initialize superclass
+        ActionServer.__init__(self, name, MyActionAction, self.goalCallback, self.cancelCallback,
+                              False)  # initialize superclass
         rospy.loginfo("ActionServer " + name + " initialized.")
 
-        self.start() # start the action server
+        self.start()  # start the action server
         rospy.loginfo("ActionServer " + name + " started.")
 
     def goalCallback(self, gh):
@@ -41,7 +43,7 @@ class MyActionServer(ActionServer):
         # Goal acceptance criteria: Accept only goals where id is even, and number of active goal processing threads
         # is < 3 (this is a dummy criteria)
         if goal.id % 2 == 0 and len(self._threads) < 3:
-            gh.set_accepted() # accept goal
+            gh.set_accepted()  # accept goal
             _current_goal = goal
 
             thread = threading.Thread(target=self.processGoal, args=(gh,))  # create a thread to process this goal
@@ -58,11 +60,11 @@ class MyActionServer(ActionServer):
 
         :param gh: a handle to the goal
         """
-        goal = gh.get_goal() # get the goal
+        goal = gh.get_goal()  # get the goal
         rospy.logerr("Received cancel request for goal " + str(goal.id))
-        result = MyActionResult() # create an empty result class instance
+        result = MyActionResult()  # create an empty result class instance
         result.result = "Goal canceled"
-        gh.set_canceled(result=result, text="Canceled.") # cancel the goal
+        gh.set_canceled(result=result, text="Canceled.")  # cancel the goal
 
     def processGoal(self, gh):
         """ Processes the goal.
@@ -79,7 +81,7 @@ class MyActionServer(ActionServer):
         tic = rospy.Time.now()
         while not rospy.is_shutdown():
             r.sleep()
-            ellapsed_secs = rospy.Time.now() - tic # get ellapsed time
+            ellapsed_secs = rospy.Time.now() - tic  # get ellapsed time
 
             # Check if goal is active, if it is not active, interrupt processing
             if not gh.get_goal_status().status == actionlib_msgs.msg.GoalStatus.ACTIVE:
@@ -92,7 +94,7 @@ class MyActionServer(ActionServer):
                 rospy.logwarn(
                     "Completed goal " + str(goal.id) + " for " + '{:.1f}'.format(ellapsed_secs.to_sec()) + " secs.")
 
-                result = MyActionResult() # create an empty result class instance
+                result = MyActionResult()  # create an empty result class instance
                 result.result = "Goal achieved successfuly."
                 gh.set_succeeded(result=result, text="Reached time to wait.")
                 del self._threads[goal.id]  # remove from dictionary
@@ -104,6 +106,6 @@ class MyActionServer(ActionServer):
 
 
 if __name__ == "__main__":
-    rospy.init_node("my_action_server") #initialize node
-    my_action_server = MyActionServer("my_action_server") # create action server instance
-    rospy.spin() # spin away!
+    rospy.init_node("my_action_server")  # initialize node
+    my_action_server = MyActionServer("my_action_server")  # create action server instance
+    rospy.spin()  # spin away!

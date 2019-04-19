@@ -26,3 +26,4 @@ if __name__ == "__main__":
     pub.publish(goal)
     rospy.loginfo("Published goal id " + str(goal.goal.id) + ", time to wait is " + str(goal.goal.time_to_wait.to_sec()) )
 
+    rospy.sleep(0.1)
