@@ -7,19 +7,19 @@ Example of how to use actionlib for multiple parallel processing of goals. Cance
 Run the action server node
 
 ```bash
-rosrun binpicking_action my_action_server.py
+rosrun my_action_server my_action_server.py
 ```
 
 ## Create new goals with 
 
 ```bash
-rosrun binpicking_action goal_publisher.py
+rosrun my_action_server goal_publisher.py
 ```
 
 or by calling 
 
 ```bash
-rostopic pub /my_action_server/goal binpicking_action/MyActnActionGoal "header:
+rostopic pub /my_action_server/goal my_action_server/MyActnActionGoal "header:
   seq: 0
   stamp:
     secs: 0

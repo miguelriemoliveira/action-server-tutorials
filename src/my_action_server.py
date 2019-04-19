@@ -3,7 +3,7 @@
 
 import rospy
 from actionlib.action_server import ActionServer
-from binpicking_action.msg import MyActionAction, MyActionGoal, MyActionFeedback, MyActionResult
+from my_action_server.msg import MyActionAction, MyActionGoal, MyActionFeedback, MyActionResult
 import actionlib_msgs.msg
 import threading
 import collections
