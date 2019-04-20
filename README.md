@@ -19,7 +19,7 @@ rosrun my_action_server goal_publisher.py
 or by calling 
 
 ```bash
-rostopic pub /my_action_server/goal my_action_server/MyActnActionGoal "header:
+rostopic pub /my_action_server/goal my_action_server/MyActionActionGoal "header:
   seq: 0
   stamp:
     secs: 0
@@ -31,30 +31,30 @@ goal_id:
     nsecs: 0
   id: ''
 goal:
-  id: 0
+  number: 50
   time_to_wait:
-    secs: 10
+    secs: 30
     nsecs: 0" 
+
 publishing and latching message. Press ctrl-C to terminate
 ```
 
 ## Cancel goals using
 
 ```bash
-rostopic pub /my_action_server/cancel actionlib_msgsoalID "stamp:
+rostopic pub /my_action_server/cancel actionlib_msgs/GoalID "stamp:
   secs: 0
   nsecs: 0
 id: ''" 
 ```
 
-if you want to cancel only a specific goal add the id of that goal, e.g.
+if you want to cancel all goals sent an empty id. But if you want to cancel only a specific goal add the id of that goal. Example: 
 
 ```bash
-rostopic pub /my_action_server/cancel actionlib_msgsoalID "stamp:
+rostopic pub /my_action_server/cancel actionlib_msgs/GoalID "stamp:
   secs: 0
   nsecs: 0
-id: '/my_action_server-8-1555715267.239146947'" 
+id: '/my_action_server-3-1555752296.823899984'" 
 ```
 
-
-
+The my_action_server_node.py is printting the running goal id.
